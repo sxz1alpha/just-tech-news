@@ -58,11 +58,18 @@ router.post('/login', (req, res) => {
             res.status(400).json({ message: 'No user with that email address!' });
             return;
         }
-        res.json({ user: dbUserData });
+        // res.json({ user: dbUserData });
    
-    });
+        //Verify User
+        const validPassword = dbUserData.checkPassword(req.body.password);
     
-    //Verify User
+        if (!validPassword) {
+            res.status(400).json({ message: 'Incorrect password! '});
+            return;
+        }
+    
+        res.json({ user: dbUserData, message: 'You are now logged in!' });
+    });   
 });
 
 // PUT /api/users/1
